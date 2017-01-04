@@ -30,24 +30,47 @@ $(document).ready(function(){
   var circle = '<span class="fa fa-circle-thin"></span>';
   var user = {symbol:null};
   var computer = {symbol:null};
+  var board = [0,0,0,0,0,0,0,0];
 
   $('#cross').click(function(){
     user.symbol = cross;
+    computer.symbol = circle;
   });
 
    $('#circle').click(function(){
     user.symbol = circle;
+    computer.symbol = cross;
   });
 
 
   $('.box').click(function(){
-
+    var index = $(this).attr('data-key');
+    board[index] = 1;
+    var nextmove = findMove();
     showMove(this, user.symbol);
+    setTimeout(computerMove(nextmove), 1500);
 
   });
 
   function showMove(location, sym){
     $(location).html(sym);
   }
+
+  function computerMove(key){
+    $('[data-key="'+ key +'"]').html(computer.symbol);
+  }
+
+  function findMove(){
+    var r = Math.floor(Math.random() * 8); // generate a random number 0 - 8
+    var move = null;
+    for(var i = 0; i < 9; i++){
+      if(i === r && board[i] !== 1){
+        move = r;
+      }
+      else{
+        move = r+1;
+      }
+    }
+  } // findMove
 
 });
