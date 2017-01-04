@@ -17,3 +17,37 @@
 // the board from left to right - from top to bottom is a 2d (nested) array
 // 1) board = [{row0: [col0, col1, col2]},{row1: [col0, col1, col2]}, {row2: [col0, col1, col2]}]
 // 2) board = [row0col0, row0col1, row0col2, row1col0, row1col1, row1col2, row2col0, row2col1, row2col2]
+
+/** main functions **/
+// function clear(); -> clear the board to start fresh
+// function greet(); -> user to pick symbol
+// function init(); -> to start the game
+// function move(); -> how to move around
+// function won(); -> how to win the game
+
+$(document).ready(function(){
+  var cross = '<span class="fa fa-close"></span>';
+  var circle = '<span class="fa fa-circle-thin"></span>';
+  var user = {symbol:null};
+  var computer = {symbol:null};
+
+  $('#cross').click(function(){
+    user.symbol = cross;
+  });
+
+   $('#circle').click(function(){
+    user.symbol = circle;
+  });
+
+
+  $('.box').click(function(){
+
+    showMove(this, user.symbol);
+
+  });
+
+  function showMove(location, sym){
+    $(location).html(sym);
+  }
+
+});
