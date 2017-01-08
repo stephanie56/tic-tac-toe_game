@@ -30,7 +30,7 @@ $(document).ready(function(){
   var circle = '<span class="fa fa-circle-thin"></span>';
   var user = {symbol:null};
   var computer = {symbol:null};
-  var board = [0,0,0,0,0,0,0,0];
+  var board = [0,0,0,0,0,0,0,0,0];
 
   $('#cross').click(function(){
     user.symbol = cross;
@@ -45,32 +45,72 @@ $(document).ready(function(){
 
   $('.box').click(function(){
     var index = $(this).attr('data-key');
-    board[index] = 1;
+    board[index] = 1; // player1: user
     var nextmove = findMove();
-    showMove(this, user.symbol);
-    setTimeout(computerMove(nextmove), 1500);
-
+    makeMove(this, user.symbol);
+    if(won() == true){
+      console.log("You won!!!");
+    }
+    else{
+      setTimeout(computerMove(nextmove), 1500);
+    }
   });
 
-  function showMove(location, sym){
+  /** main functions **/
+
+  function makeMove(location, sym){
     $(location).html(sym);
   }
 
   function computerMove(key){
     $('[data-key="'+ key +'"]').html(computer.symbol);
+    board[key] = 2; // player2: computer
+    console.log(board);
   }
 
+  // This function is to find the next available cell to move onto -> output index of the available cell
   function findMove(){
-    var r = Math.floor(Math.random() * 8); // generate a random number 0 - 8
     var move = null;
-    for(var i = 0; i < 9; i++){
-      if(i === r && board[i] !== 1){
-        move = r;
-      }
-      else{
-        move = r+1;
+      var r = Math.floor(Math.random() * 8); // generate a random number 0 - 8
+      for(var i = 0; i < 9; i++){
+        if(i === r && board[i] !== 1){
+          move = r;
+          return move;
+        }
+        else{
+          console.log("ooops");
+        }
+      } //forloop ends
+  } // findmove ends
+
+  function won(){
+    for(var row = 0; row < 3; row++){
+      for(var col = 0; col < 3; col++){
+        if(board[row][col] == board[row][col+1] == board[row][col+2] && board[row][col] != 0){
+          console.log("row it!");
+          return true;
+        }
+        else if(board[row][col] == board[row+1][col] == board[row+2][col] && board[row][col] != 0){
+          console.log("colsh you!");
+          return true;
+        }
+        else if(board[row][col] == board[row+1][col+1] == board[row+2][col+2] && board[row][col] != 0){
+          console.log("cross off!");
+          return true;
+        }
+        else if(board[row][col] == board[row+1][col-1] == board[row+2][col-2] && board[row][col] != 0){
+          console.log("cross off!");
+          return true;
+        }
+        else {
+          return false;
+        }
       }
     }
-  } // findMove
+
+    return false;
+
+  }
+
 
 });
