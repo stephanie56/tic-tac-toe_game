@@ -1,0 +1,23 @@
+
+var cell = {
+  cells:[],
+  index: 0, // 0 - 8
+  row:0, // 0, 1, 2
+  col:0, // 0, 1, 2
+  marked: false, // true or false -> default is false
+  symbol: "X" // 'X', 'O' or null
+}
+
+There are 3 status for each cell:
+- available
+- marked by user
+- marked by opponent
+
+** Make a move **
+User click on one of .box cells
+Step 1. check the availability of current cell (this)
+1) if the current cell has been marked, return false; // user will need to click on another cell
+
+2) if the current cell is available, continue with step 2.
+
+Step 2. User mark on current cell with its symbol

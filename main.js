@@ -26,34 +26,38 @@
 // function won(); -> how to win the game
 
 $(document).ready(function(){
-  var cross = '<span class="fa fa-close"></span>';
+  var user = {symbol:null, token:1};
+  var computer = {symbol:null, token:2};
+  var cross = '<span class="fa fa-close"></span';
   var circle = '<span class="fa fa-circle-thin"></span>';
-  var user = {symbol:null};
-  var computer = {symbol:null};
-  var board = [0,0,0,0,0,0,0,0,0];
+  var board = [[0,0,0],[0,0,0],[0,0,0]];
+
+  clear();
 
   $('#cross').click(function(){
     user.symbol = cross;
     computer.symbol = circle;
   });
 
-   $('#circle').click(function(){
+  $('#circle').click(function(){
     user.symbol = circle;
     computer.symbol = cross;
   });
 
-
   $('.box').click(function(){
-    var index = $(this).attr('data-key');
-    board[index] = 1; // player1: user
-    var nextmove = findMove();
-    makeMove(this, user.symbol);
-    if(won() == true){
-      console.log("You won!!!");
+    var row = $(this).attr('data-row');
+    var col = $(this).attr('data-col');
+    if(board[row][col] == 0){
+      board[row][col] = 1; // player1: user
+      makeMove(this, user.symbol);
+      if(won()==true){
+        console.log("You won!!!");
+      }
+      else{
+        setTimeout(computerMove(findMove()), 2500);
+      }
     }
-    else{
-      setTimeout(computerMove(nextmove), 1500);
-    }
+
   });
 
   /** main functions **/
@@ -62,55 +66,40 @@ $(document).ready(function(){
     $(location).html(sym);
   }
 
-  function computerMove(key){
+  function computerMove(move){
+    var r = move[0];
+    var c = move[1];
+    var key = r*3 + c;
     $('[data-key="'+ key +'"]').html(computer.symbol);
-    board[key] = 2; // player2: computer
-    console.log(board);
+    board[r][c] = 2; // player2: computer
+    console.table(board);
   }
 
   // This function is to find the next available cell to move onto -> output index of the available cell
   function findMove(){
-    var move = null;
-      var r = Math.floor(Math.random() * 8); // generate a random number 0 - 8
-      for(var i = 0; i < 9; i++){
-        if(i === r && board[i] !== 1){
-          move = r;
-          return move;
-        }
-        else{
-          console.log("ooops");
-        }
-      } //forloop ends
+    var move = [];
+    while(move.length == 0){
+      var i = Math.round(Math.random()*2);
+      var j = Math.round(Math.random()*2);
+      for(var r = 0; r < 3; r++){
+        for(var c = 0; c < 3; c++){
+          //case 1: if computer has 2 in a row or in a col
+          if(board[r][c] == 0 && r == i && c == j){
+            move.push(r,c);
+            break;
+          }
+        } // iterate each col
+      } // iterate each row
+    }
+    return move;
   } // findmove ends
 
   function won(){
-    for(var row = 0; row < 3; row++){
-      for(var col = 0; col < 3; col++){
-        if(board[row][col] == board[row][col+1] == board[row][col+2] && board[row][col] != 0){
-          console.log("row it!");
-          return true;
-        }
-        else if(board[row][col] == board[row+1][col] == board[row+2][col] && board[row][col] != 0){
-          console.log("colsh you!");
-          return true;
-        }
-        else if(board[row][col] == board[row+1][col+1] == board[row+2][col+2] && board[row][col] != 0){
-          console.log("cross off!");
-          return true;
-        }
-        else if(board[row][col] == board[row+1][col-1] == board[row+2][col-2] && board[row][col] != 0){
-          console.log("cross off!");
-          return true;
-        }
-        else {
-          return false;
-        }
-      }
-    }
-
     return false;
-
   }
 
+  function clear(){
+    console.log("clear board!");
+  }
 
 });
