@@ -21,3 +21,12 @@ button{
   margin-left:10px;
   margin-top:10px;
 }
+
+.message {
+  font-size:2em;
+  text-align: center;
+  color:#fff;
+  display:inline;
+  font-weight:bold;
+  background-color:#CC181E;
+}

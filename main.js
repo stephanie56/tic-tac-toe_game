@@ -27,16 +27,12 @@
 
 $(document).ready(function(){
   var user = {symbol:null,
-              token:1,
               score:[[0,0,0],[0,0,0],[0,0,0]]};
   var computer = {symbol:null,
-                  token:2,
                   score:[[0,0,0],[0,0,0],[0,0,0]]};
   var cross = '<span class="fa fa-close"></span';
   var circle = '<span class="fa fa-circle-thin"></span>';
   var board = [[0,0,0],[0,0,0],[0,0,0]];
-
-  clear();
 
   $('#cross').click(function(){
     user.symbol = cross;
@@ -48,6 +44,8 @@ $(document).ready(function(){
     computer.symbol = cross;
   });
 
+  $('#reset').click(clear);
+
   $('.box').click(function(){
     var row = $(this).attr('data-row');
     var col = $(this).attr('data-col');
@@ -57,7 +55,7 @@ $(document).ready(function(){
       $(this).html(user.symbol);
       console.table(user.score);
       if(won(user.score)==true){
-        console.log("You won!!!");
+        $(".message").html("YOU WON!!!");
       }
       else{
         setTimeout(computerMove(findMove()), 2500);
@@ -76,7 +74,7 @@ $(document).ready(function(){
     board[r][c] = 2; // player2: computer
     computer.score[r][c] = 1;
     if(won(computer.score)==true){
-      console.log("Sorry you lost!");
+      $(".message").html("YOU LOSE!!");
     }
     console.table(computer.score);
   }
@@ -120,10 +118,15 @@ $(document).ready(function(){
        return false;
     }
 
-
-
   function clear(){
-    console.log("clear board!");
+    console.log("click to clear");
+    $(".box").find('span').remove();
+    board = [[0,0,0],[0,0,0],[0,0,0]];
+    user = {symbol:null,
+            score:[[0,0,0],[0,0,0],[0,0,0]]};
+    computer = {symbol:null,
+                score:[[0,0,0],[0,0,0],[0,0,0]]};
+    $(".message").html("");
   }
 
 });
