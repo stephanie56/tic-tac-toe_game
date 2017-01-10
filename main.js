@@ -56,6 +56,7 @@ $(document).ready(function(){
       console.table(user.score);
       if(won(user.score)==true){
         $(".message").html("YOU WON!!!");
+        setTimeout(clear, 2500);
       }
       else{
         setTimeout(computerMove(findMove()), 2500);
@@ -75,6 +76,7 @@ $(document).ready(function(){
     computer.score[r][c] = 1;
     if(won(computer.score)==true){
       $(".message").html("YOU LOSE!!");
+      setTimeout(clear, 2500);
     }
     console.table(computer.score);
   }
