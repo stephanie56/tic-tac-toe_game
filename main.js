@@ -26,8 +26,12 @@
 // function won(); -> how to win the game
 
 $(document).ready(function(){
-  var user = {symbol:null, token:1};
-  var computer = {symbol:null, token:2};
+  var user = {symbol:null,
+              token:1,
+              score:[[0,0,0],[0,0,0],[0,0,0]]};
+  var computer = {symbol:null,
+                  token:2,
+                  score:[[0,0,0],[0,0,0],[0,0,0]]};
   var cross = '<span class="fa fa-close"></span';
   var circle = '<span class="fa fa-circle-thin"></span>';
   var board = [[0,0,0],[0,0,0],[0,0,0]];
@@ -48,9 +52,11 @@ $(document).ready(function(){
     var row = $(this).attr('data-row');
     var col = $(this).attr('data-col');
     if(board[row][col] == 0){
-      board[row][col] = 1; // player1: user
-      makeMove(this, user.symbol);
-      if(won()==true){
+      board[row][col] = 1; // player1: use
+      user.score[row][col] = 1;
+      $(this).html(user.symbol);
+      console.table(user.score);
+      if(won(user.score)==true){
         console.log("You won!!!");
       }
       else{
@@ -62,17 +68,17 @@ $(document).ready(function(){
 
   /** main functions **/
 
-  function makeMove(location, sym){
-    $(location).html(sym);
-  }
-
   function computerMove(move){
     var r = move[0];
     var c = move[1];
     var key = r*3 + c;
     $('[data-key="'+ key +'"]').html(computer.symbol);
     board[r][c] = 2; // player2: computer
-    console.table(board);
+    computer.score[r][c] = 1;
+    if(won(computer.score)==true){
+      console.log("Sorry you lost!");
+    }
+    console.table(computer.score);
   }
 
   // This function is to find the next available cell to move onto -> output index of the available cell
@@ -94,9 +100,27 @@ $(document).ready(function(){
     return move;
   } // findmove ends
 
-  function won(){
-    return false;
-  }
+  function won(score){
+    for(var row = 0; row < 3; row++){
+      if(score[row][0] == 1 && score[row][1] == 1 && score[row][2] == 1){
+        return true;
+      }
+      for(var col = 0; col < 3; col++){
+        if(score[0][col] == 1 && score[1][col] == 1 && score[2][col] == 1){
+          return true;
+        }
+        else if(score[0][0] == 1 && score[1][1] == 1 && score[2][2] == 1){
+          return true;
+        }
+        else if(score[0][2] == 1 && score[1][1] == 1 && score[2][0] == 1){
+          return true;
+        }
+      }
+    }
+       return false;
+    }
+
+
 
   function clear(){
     console.log("clear board!");
